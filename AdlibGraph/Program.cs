@@ -42,6 +42,16 @@ namespace AdlibGraph
         Console.WriteLine();
         Console.WriteLine($"Writing {args[1]}");
         adlibNodes.SaveDgml(args[1]);
+
+        adlibNodes.ListUnusedScreens("unused_screens.txt");
+        adlibNodes.ListUnusedIndexes("unused_indexes.txt");
+        adlibNodes.ListUnusedDatabases("unused_databases.txt");
+        adlibNodes.ListUnusedFields("unused_fields.txt");
+        if (adlibNodes.UnusedMethodsCount != 0)
+        {
+          adlibNodes.ListUnusedMethods("unused_methods.txt");
+        }
+
         Console.WriteLine("Done");
 
         //adlibNodes.DeleteIndexes();

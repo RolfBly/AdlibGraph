@@ -351,6 +351,109 @@ namespace DDigit.Graph
     public int UnusedFieldsCount => Fields.UnusedCount;
     public int UnusedIndexesCount => Indexes.UnusedCount;
 
+
+    public void ListUnusedDatabases(string fileName)
+    {
+      using (StreamWriter writer = new StreamWriter(fileName, false))
+      {
+        int count = 0;
+        writer.WriteLine("=== UNUSED DATABASES ===");
+        writer.WriteLine("nr;database_name;path");
+        foreach (var node in Databases.Values)
+        {
+          if (node.ReverseEdges.Count == 0)
+          {
+            writer.WriteLine($"{++count};{node.Name};{node.Path}");
+          }
+        }
+      }
+      Console.WriteLine($"Writing {fileName}");
+    }
+
+    public void ListUnusedFields(string fileName)
+    {
+      using (StreamWriter writer = new StreamWriter(fileName, false))
+      {
+        writer.WriteLine("=== UNUSED FielDS ===");
+        writer.WriteLine("nr;Field_name;path");
+        foreach (string elem in Fields.UnusedFields)
+        {
+          writer.WriteLine($"{elem}");
+        }
+      }
+      Console.WriteLine($"Writing {fileName}");
+    }
+
+    public void ListUnusedMethods(string fileName)
+    {
+      using (StreamWriter writer = new StreamWriter(fileName, false))
+      {
+        writer.WriteLine("=== UNUSED METHODS ===");
+        writer.WriteLine("nr;method_name;path");
+        foreach (string elem in Methods.UnusedMethods)
+        {
+          writer.WriteLine($"{elem}");
+        }
+      }
+      Console.WriteLine($"Writing {fileName}");
+    }
+
+
+    public void ListUnusedScreens(string fileName)
+    {
+      using (StreamWriter writer = new StreamWriter(fileName, false))
+      { 
+        // List screens
+        int count = 0;
+        writer.WriteLine("=== UNUSED SCREENS ===");
+        writer.WriteLine("nr;screen_title;path");
+        foreach (var node in Screens.Values)
+        { 
+          if (node.ReverseEdges.Count == 0)
+          { 
+            writer.WriteLine($"{++count};{node.Name};{node.Path}");
+          }
+        }
+      }
+      Console.WriteLine($"Writing {fileName}");
+    }
+
+    public void ListUnusedIndexes(string fileName) 
+    {
+      using (StreamWriter writer = new StreamWriter(fileName, false))
+      { 
+        // List Indexes
+        int count = 0;
+        writer.WriteLine("=== UNUSED INDEXES ===");
+        writer.WriteLine("nr;index name (database);path");
+        foreach (var node in Indexes.Values)
+        {
+          bool used = false;
+          foreach (var reverseEdge in node.ReverseEdges)
+          {
+            var sourceNode = reverseEdge.Source;
+            foreach (var forwardEdge in sourceNode.Edges)
+            {
+              if (forwardEdge.Target == node && forwardEdge.Traversed)
+              {
+                used = true;
+                break;
+              }
+            }
+            if (used)
+            {
+              break;
+            }
+          }
+          if (!used)
+          {
+            writer.WriteLine($"{++count};{node.Name};{node.Path}");
+          }
+        }
+      }
+      Console.WriteLine($"Writing {fileName}");
+    }
+
     readonly Storage storage = new Storage();
 
   }

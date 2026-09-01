@@ -21,6 +21,23 @@ namespace DDigit.Graph
       }
     }
 
+    public string[] UnusedFields
+    {
+      get
+      {
+        int count = 0;
+        List<string> list = new List<string>();
+        foreach (var node in fields.Values)
+        {
+          if (node.ReverseEdges.Count == 0)
+          {
+            list.Add($"{++count};{node.Path};{node.Name}");
+          }
+        }
+        return list.ToArray();
+      }
+    }
+
     public AdlibNode FindFieldNode(DatabaseInfo databaseInfo, string tag) =>
     fields.TryGetValue(FieldNode.FieldPath(databaseInfo, tag), out FieldNode fieldNode) ? fieldNode : null;
 

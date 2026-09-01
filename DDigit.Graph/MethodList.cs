@@ -35,6 +35,25 @@ namespace DDigit.Graph
       }
     }
 
+    public string[] UnusedMethods
+    // not tested yet! 
+    {
+      get
+      {
+        int count = 0;
+        List<string> list = new List<string>();
+        foreach (var node in methods.Values)
+        {
+          if (node.ReverseEdges.Count == 0)
+          {
+            list.Add($"{++count};{node.Name};{node.Path}");
+          }
+        }
+        return list.ToArray();
+      }
+    }
+
+
     readonly SortedDictionary<string, MethodNode> methods = new SortedDictionary<string, MethodNode>();
     internal IEnumerable<MethodNode> Values => methods.Values;
     public int Count => methods.Count;
