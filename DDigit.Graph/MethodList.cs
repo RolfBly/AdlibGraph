@@ -17,6 +17,11 @@ namespace DDigit.Graph
 
       methodInfo.DetailScreenList.ForEach((screen) =>
        screens.LinkScreenToNode(applicationInfo, dataSourceNode, screen, AdlibEdgeType.UsesListScreen));
+
+      methodInfo.SearchScreenList.ForEach((screen) =>
+       screens.LinkScreenToNode(applicationInfo, dataSourceNode, screen, AdlibEdgeType.UsesSearchScreen));
+
+      screens.LinkScreenToNode(applicationInfo, dataSourceNode, methodInfo.InitialScreen, AdlibEdgeType.UsesInitialScreen);
     }
 
     public int UnusedCount

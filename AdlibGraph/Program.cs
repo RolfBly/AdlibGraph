@@ -26,6 +26,7 @@ namespace AdlibGraph
         adlibNodes.LoadNodes(args[0]);
 
         adlibNodes.CreateApplicationEdges();
+        adlibNodes.CreateDatabaseEdges();
         stopWatch.Stop();
 
         Console.WriteLine($"Data for '{args[0]}' loaded in {stopWatch.ElapsedMilliseconds} mS.\n");

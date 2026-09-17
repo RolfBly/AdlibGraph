@@ -36,6 +36,8 @@ namespace DDigit.Graph
               screens.LinkScreenToNode(databaseInfo, fieldNode, fieldInfo.LinkScreen, AdlibEdgeType.UsesLinkScreen);
               screens.LinkScreenToNode(databaseInfo, fieldNode, fieldInfo.ZoomScreen, AdlibEdgeType.UsesZoomScreen);
               screens.LinkScreenToNode(databaseInfo, fieldNode, fieldInfo.EditScreen, AdlibEdgeType.UsesEditScreen);
+              screens.LinkScreenToNode(databaseInfo, fieldNode, ((FieldInfo)fieldInfo).SearchScreen, AdlibEdgeType.UsesSearchScreen);
+              screens.LinkScreenToNode(databaseInfo, fieldNode, fieldInfo.DetailScreen, AdlibEdgeType.UsesDetailScreen);
             }
 
             if (!fieldInfo.IsLinkRef)

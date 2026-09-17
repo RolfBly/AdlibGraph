@@ -44,6 +44,8 @@ namespace DDigit.Graph
           screens.LinkScreenToNode(applicationInfo, dataSourceNode, screenName, AdlibEdgeType.UsesListScreen));
         dataSourceInfo.DetailScreenList.ForEach(screenName =>
           screens.LinkScreenToNode(applicationInfo, dataSourceNode, screenName, AdlibEdgeType.UsesDetailScreen));
+        dataSourceInfo.SearchScreenList.ForEach(screenName =>
+          screens.LinkScreenToNode(applicationInfo, dataSourceNode, screenName, AdlibEdgeType.UsesSearchScreen));
         dataSourceInfo.MethodList.ForEach(methodInfo =>
           methods.LinkMethodToNode(applicationInfo, dataSourceNode, methodInfo, screens));
 

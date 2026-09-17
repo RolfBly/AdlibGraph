@@ -18,6 +18,8 @@
     UsesEditScreen,
     UsesListScreen,
     UsesDetailScreen,
+    UsesSearchScreen,
+    UsesInitialScreen,
     UsesLinkField,
     FieldOf,
     IndexOf,

@@ -179,10 +179,12 @@ namespace DDigit.Graph
       root.Add(DGMLNodes, DGMLCategories, DGMLLinks);
       dgml.Add(root);
 
+      var visitedForLinks = new HashSet<AdlibNode>();
+
       foreach (var node in Applications.Values)
       {
         DGMLNodes.Add(CreateDGMLNode(node));
-        AddDGMLLinks(node, DGMLNodes, DGMLLinks);
+        AddDGMLLinks(node, DGMLNodes, DGMLLinks, visitedForLinks);
       }
 
       foreach (var node in Databases.Values)
@@ -225,7 +227,7 @@ namespace DDigit.Graph
 
       foreach (var node in Applications.Values)
       {
-        AddDGMLLinks(node, DGMLNodes, DGMLLinks);
+        AddDGMLLinks(node, DGMLNodes, DGMLLinks, visitedForLinks);
       }
 
       foreach (var node in Databases.Values)
@@ -241,7 +243,7 @@ namespace DDigit.Graph
         }
         if (!linked)
         {
-          AddDGMLLinks(node, DGMLNodes, DGMLLinks);
+          AddDGMLLinks(node, DGMLNodes, DGMLLinks, visitedForLinks);
         }
       }
 
@@ -275,13 +277,17 @@ namespace DDigit.Graph
       dgml.Save(fileName);
     }
 
-    void AddDGMLLinks(AdlibNode node, XElement dGMLNodes, XElement dGMLLinks)
+    void AddDGMLLinks(AdlibNode node, XElement dGMLNodes, XElement dGMLLinks, HashSet<AdlibNode> visited)
     {
+      if (!visited.Add(node))
+      {
+        return;
+      }
       foreach (var edge in node.Edges)
       {
         var childNode = edge.Target;
         dGMLLinks.Add(CreateDGMLLink(edge));
-        AddDGMLLinks(childNode, dGMLNodes, dGMLLinks);
+        AddDGMLLinks(childNode, dGMLNodes, dGMLLinks, visited);
       }
     }
 
