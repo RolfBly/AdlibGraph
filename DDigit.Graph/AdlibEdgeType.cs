@@ -20,6 +20,7 @@
     UsesDetailScreen,
     UsesSearchScreen,
     UsesInitialScreen,
+    RequiresFeedbackDatabase,
     UsesLinkField,
     FieldOf,
     IndexOf,

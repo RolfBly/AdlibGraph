@@ -18,6 +18,24 @@ namespace DDigit.Graph
         var databaseNode = FindDatabaseNode(databaseInfo);
         if (databaseNode != null)
         {
+          foreach (var feedback in databaseInfo.FeedBackLinkList)
+          {
+            IAdlibDatabaseInfo feedbackDatabaseInfo;
+            try
+            {
+              feedbackDatabaseInfo = feedback.DatabaseInfo;
+            }
+            catch (FileNotFoundException)
+            {
+              Console.WriteLine($"Waarschuwing: feedback database '{feedback.DatabaseName}' van '{databaseInfo.BaseName}' bestaat niet meer op schijf");
+              continue;
+            }
+            if (databases.TryGetValue(DatabaseNode.DatabasePath(feedbackDatabaseInfo), out var feedbackNode))
+            {
+              AddEdge(databaseNode, AdlibEdgeType.RequiresFeedbackDatabase, feedbackNode);
+            }
+          }
+
           foreach (var fieldInfo in databaseInfo.FieldInfoCollection.Values)
           {
             var fieldNode = fields.FindFieldNode(databaseInfo, fieldInfo.Tag);
