@@ -8,10 +8,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>AdlibGraph</RootNamespace>
     <AssemblyName>AdlibGraph</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Adlib.Constants">
+      <HintPath>..\DDigit.Graph\Adlib.Constants.dll</HintPath>
+    </Reference>
+    <Reference Include="Adlib.Database">
+      <HintPath>..\DDigit.Graph\Adlib.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Adlib.Interfaces">
+      <HintPath>..\DDigit.Graph\Adlib.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Adlib.Objects">
+      <HintPath>..\DDigit.Graph\Adlib.Objects.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
