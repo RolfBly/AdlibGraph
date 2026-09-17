@@ -40,6 +40,8 @@ namespace DDigit.Graph
 
         AddEdge(applicationNode, AdlibEdgeType.HasDataSource, dataSourceNode);
 
+        var databasePath = DatabasePath(applicationInfo, dataSourceInfo);
+
         dataSourceInfo.ListScreenList.ForEach(screenName =>
           screens.LinkScreenToNode(applicationInfo, dataSourceNode, screenName, AdlibEdgeType.UsesListScreen));
         dataSourceInfo.DetailScreenList.ForEach(screenName =>
@@ -47,12 +49,11 @@ namespace DDigit.Graph
         dataSourceInfo.SearchScreenList.ForEach(screenName =>
           screens.LinkScreenToNode(applicationInfo, dataSourceNode, screenName, AdlibEdgeType.UsesSearchScreen));
         dataSourceInfo.MethodList.ForEach(methodInfo =>
-          methods.LinkMethodToNode(applicationInfo, dataSourceNode, methodInfo, screens));
-
-        var databasePath = DatabasePath(applicationInfo, dataSourceInfo);
+          methods.LinkMethodToNode(applicationInfo, dataSourceNode, methodInfo, screens, databases, fields, indexes, databasePath));
 
         screens.LinkScreensToDataSourceNode(applicationInfo, databases, fields, indexes, dataSourceInfo.DetailScreenList, databasePath);
         screens.LinkScreensToDataSourceNode(applicationInfo, databases, fields, indexes, dataSourceInfo.ListScreenList, databasePath);
+        screens.LinkScreensToDataSourceNode(applicationInfo, databases, fields, indexes, dataSourceInfo.SearchScreenList, databasePath);
       }
     }
 

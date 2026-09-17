@@ -5,7 +5,8 @@ namespace DDigit.Graph
 {
   public class MethodList : NodeList
   {
-    internal void LinkMethodToNode(ApplicationInfo applicationInfo, AdlibNode dataSourceNode, MethodInfo methodInfo, ScreenList screens)
+    internal void LinkMethodToNode(ApplicationInfo applicationInfo, AdlibNode dataSourceNode, MethodInfo methodInfo, ScreenList screens,
+                                    DatabaseList databases, FieldList fields, IndexList indexes, string databasePath)
     {
       var methodNode = new MethodNode(dataSourceNode.Path, methodInfo);
 
@@ -22,6 +23,10 @@ namespace DDigit.Graph
        screens.LinkScreenToNode(applicationInfo, dataSourceNode, screen, AdlibEdgeType.UsesSearchScreen));
 
       screens.LinkScreenToNode(applicationInfo, dataSourceNode, methodInfo.InitialScreen, AdlibEdgeType.UsesInitialScreen);
+
+      screens.LinkScreensToDataSourceNode(applicationInfo, databases, fields, indexes, methodInfo.ListScreenList, databasePath);
+      screens.LinkScreensToDataSourceNode(applicationInfo, databases, fields, indexes, methodInfo.DetailScreenList, databasePath);
+      screens.LinkScreensToDataSourceNode(applicationInfo, databases, fields, indexes, methodInfo.SearchScreenList, databasePath);
     }
 
     public int UnusedCount
