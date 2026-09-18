@@ -312,6 +312,20 @@ namespace DDigit.Graph
         new XAttribute("Category", node.GetType().Name));
 
 
+    public List<(string Database, string FeedbackIn)> FeedbackOnlyDatabaseReport()
+    {
+      var rows = new List<(string Database, string FeedbackIn)>();
+      foreach (var db in Databases.Values)
+      {
+        if (db.ReverseEdges.Count > 0 && db.ReverseEdges.TrueForAll(e => e.EdgeType == AdlibEdgeType.RequiresFeedbackDatabase))
+        {
+          var sources = string.Join(", ", db.ReverseEdges.ConvertAll(e => e.Source.Name));
+          rows.Add((db.Name, sources));
+        }
+      }
+      return rows;
+    }
+
     public void CreateApplicationEdges() => Applications.CreateEdges(Datasources, Methods, Screens, Databases, Fields, Indexes);
 
     public void CreateDatabaseEdges() => Databases.CreateEdges(Fields, Indexes, Screens);

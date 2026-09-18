@@ -40,6 +40,22 @@ namespace AdlibGraph
         Console.WriteLine($"Fields       : {adlibNodes.FieldCount,columnWidth:#} {adlibNodes.UnusedFieldsCount,columnWidth:#} {adlibNodes.UnusedFieldsCount / (double)adlibNodes.FieldCount,columnWidth:P1}");
         Console.WriteLine($"Indexes      : {adlibNodes.IndexCount,columnWidth:#} {adlibNodes.UnusedIndexesCount,columnWidth:#} {adlibNodes.UnusedIndexesCount / (double)adlibNodes.IndexCount,columnWidth:P1}");
 
+        var feedbackOnlyDatabases = adlibNodes.FeedbackOnlyDatabaseReport();
+        Console.WriteLine();
+        Console.WriteLine("Alleen als feedback database");
+        Console.WriteLine($"{"database:",-12} {"feedbackdatabase in:",-20}");
+        if (feedbackOnlyDatabases.Count == 0)
+        {
+          Console.WriteLine("(geen)");
+        }
+        else
+        {
+          foreach (var row in feedbackOnlyDatabases)
+          {
+            Console.WriteLine($"{row.Database,-12} {row.FeedbackIn}");
+          }
+        }
+
         Console.WriteLine();
         Console.WriteLine($"Writing {args[1]}");
         adlibNodes.SaveDgml(args[1]);
