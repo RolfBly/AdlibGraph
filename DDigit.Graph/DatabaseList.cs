@@ -56,6 +56,12 @@ namespace DDigit.Graph
               screens.LinkScreenToNode(databaseInfo, fieldNode, fieldInfo.EditScreen, AdlibEdgeType.UsesEditScreen);
               screens.LinkScreenToNode(databaseInfo, fieldNode, ((FieldInfo)fieldInfo).SearchScreen, AdlibEdgeType.UsesSearchScreen);
               screens.LinkScreenToNode(databaseInfo, fieldNode, fieldInfo.DetailScreen, AdlibEdgeType.UsesDetailScreen);
+
+              var linkedDatabaseNode = FindLinkedDatabaseNode(databaseInfo, fieldInfo);
+              if (linkedDatabaseNode != null)
+              {
+                AddEdge(databaseNode, AdlibEdgeType.UsesDatabase, linkedDatabaseNode);
+              }
             }
 
             if (!fieldInfo.IsLinkRef)
@@ -69,6 +75,33 @@ namespace DDigit.Graph
           }
         }
       }
+    }
+
+    DatabaseNode FindLinkedDatabaseNode(DatabaseInfo databaseInfo, IFieldInfo fieldInfo)
+    {
+      IAdlibDatabaseInfo linkedDatabaseInfo = null;
+      try
+      {
+        linkedDatabaseInfo = fieldInfo.LinkedDatabaseInfo;
+      }
+      catch (FileNotFoundException)
+      {
+        Console.WriteLine($"Waarschuwing: gelinkte database '{fieldInfo.LinkedDatabase}' van veld '{fieldInfo.Tag}' in '{databaseInfo.BaseName}' bestaat niet meer op schijf");
+      }
+
+      if (linkedDatabaseInfo != null && databases.TryGetValue(DatabaseNode.DatabasePath(linkedDatabaseInfo), out var node))
+      {
+        return node;
+      }
+
+      // LinkedDatabaseInfo can return null even when IsLinked is set and LinkedDatabase (the raw name) is populated,
+      // e.g. for repeatable/multi-occurrence link fields and language-variant links. Fall back to a name lookup.
+      if (!string.IsNullOrWhiteSpace(fieldInfo.LinkedDatabase) && databasesByName.TryGetValue(fieldInfo.LinkedDatabase, out var byName))
+      {
+        return byName;
+      }
+
+      return null;
     }
 
     void LinkFieldNodeToDatabaseNode(AdlibNode databaseNode, AdlibNode fieldNode)
@@ -89,6 +122,7 @@ namespace DDigit.Graph
           var databaseInfo = new DatabaseInfo(new AdlibPath(file.FullName), storage);
           var databaseNode = new DatabaseNode(databaseInfo);
           databases[databaseNode.Path] = databaseNode;
+          databasesByName[databaseInfo.BaseName] = databaseNode;
 
           foreach (var fieldInfo in databaseInfo.FieldInfoCollection.Values)
           {
@@ -114,6 +148,7 @@ namespace DDigit.Graph
     public int Count => databases.Count;
 
     readonly SortedDictionary<string, DatabaseNode> databases = new SortedDictionary<string, DatabaseNode>();
+    readonly Dictionary<string, DatabaseNode> databasesByName = new Dictionary<string, DatabaseNode>(StringComparer.OrdinalIgnoreCase);
 
   }
 }
