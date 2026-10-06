@@ -230,21 +230,11 @@ namespace DDigit.Graph
         AddDGMLLinks(node, DGMLNodes, DGMLLinks, visitedForLinks);
       }
 
+      // Also start from every database, so databases not reachable from an application still get their links;
+      // visitedForLinks skips the ones already walked.
       foreach (var node in Databases.Values)
       {
-        bool linked = false;
-        foreach (var edge in node.Edges)
-        {
-          if (edge.EdgeType == AdlibEdgeType.UsesDatabase)
-          {
-            linked = true;
-            break;
-          }
-        }
-        if (!linked)
-        {
-          AddDGMLLinks(node, DGMLNodes, DGMLLinks, visitedForLinks);
-        }
+        AddDGMLLinks(node, DGMLNodes, DGMLLinks, visitedForLinks);
       }
 
       foreach (var type in new Type[]
