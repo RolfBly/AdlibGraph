@@ -326,6 +326,22 @@ namespace DDigit.Graph
       return rows;
     }
 
+    // A database whose only references, incoming and outgoing, point to itself (e.g. "=" links for broader/narrower
+    // terms) is orphaned: the self-links keep ReverseEdges non-empty, so it never shows up as unused.
+    public List<string> SelfLinkedOnlyDatabaseReport()
+    {
+      var rows = new List<string>();
+      foreach (var db in Databases.Values)
+      {
+        if (db.ReverseEdges.Count > 0 && db.ReverseEdges.TrueForAll(e => e.Source == db) &&
+            db.Edges.TrueForAll(e => (e.EdgeType != AdlibEdgeType.UsesDatabase && e.EdgeType != AdlibEdgeType.RequiresFeedbackDatabase) || e.Target == db))
+        {
+          rows.Add(db.Name);
+        }
+      }
+      return rows;
+    }
+
     public void CreateApplicationEdges() => Applications.CreateEdges(Datasources, Methods, Screens, Databases, Fields, Indexes);
 
     public void CreateDatabaseEdges() => Databases.CreateEdges(Fields, Indexes, Screens);

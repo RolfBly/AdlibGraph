@@ -56,6 +56,17 @@ namespace AdlibGraph
           }
         }
 
+        var selfLinkedOnlyDatabases = adlibNodes.SelfLinkedOnlyDatabaseReport();
+        if (selfLinkedOnlyDatabases.Count != 0)
+        {
+          Console.WriteLine();
+          Console.WriteLine("Verweesd: alleen links naar zichzelf");
+          foreach (var database in selfLinkedOnlyDatabases)
+          {
+            Console.WriteLine(database);
+          }
+        }
+
         Console.WriteLine();
         Console.WriteLine($"Writing {args[1]}");
         adlibNodes.SaveDgml(args[1]);
