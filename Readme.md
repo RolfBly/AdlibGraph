@@ -26,17 +26,31 @@ This is, however, not very useful. Even the simplest Adlib application has hundr
 This is why I adapted the code to report objects that are not in use:
 
 - screens (.fmt's) in `unused_screens.txt`
-- databases (.inf's) in `unused_databases.txt`
-- indexes in `unused_indexes.txt`
-- fields in `unused_fields.txt`
+- databases (.inf's) in `unused_databases.txt`. 
+- indexes in `unused_indexes.txt`. 
+- fields in `unused_fields.txt`. 
+
+The console output now also reports database that do not story anything, but are referred to as feedback database only. If you remove the INF, you have to make sure that none of the remaining databases mention them in de Feedback database section. 
 
 ## what it does not do (yet)
 
-`program.cs` has two lines commented out. Uncommented, they intended to delete unused indexes and unused screens. At the time of this writing, 
+`program.cs` has two lines commented out. Uncommented, they tried to delete unused indexes and unused screens. At the time of this writing, _deleting_ "unused" screens is a bad idea. It's better to park them somewhere safe outside the main application directory. See todo. 
 
-- _deleting_ "unused" screens is a bad idea because the graph generator may have missed some edges. It's better to park them somewhere safe outside the main application directory. 
-- deleting the indexes does not work at all. Runtime bug.  
-- Some edges between databases are not detected. 
+Deleting indexes in the original code does not work at all. You get a runtime error. Other than that, automatically removing indexes is a bad idea. See todo. 
 
-The latter two items might be a todo. 
+## todo
+
+- test and eliminate false positives and false negatives. Some of these only emerge when testing the application. 
+- add command line switch to make generating the graph optional
+- add command line switch to move unused screens elsewhere (default ..\[Applicatio folder name]_unused\screens)
+
+### discussion
+
+In theory, **removing unused indexes** might improve performance. Indexes (in a particular database) are updated every time a record is written. This may take some time. It may take less time when there are fewer indexes to update.  
+
+The topic of removing unused fields requires further investigation. 
+
+
+
+
 
